@@ -1,0 +1,22 @@
+nsd:
+  nsd:
+  - description: NS consisting of a single KNF openldap_knf connected to mgmt network
+    designer: OSM
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: vvcu-as-acnf-knf
+        virtual-link-connectivity:
+        - constituent-cpd-id:
+          - constituent-base-element-id: vvcu-as-acnf
+            constituent-cpd-id: mgmt-ext
+          virtual-link-profile-id: mgmtnet
+        vnfd-id: vvcu-as-acnf-knf
+    id: vvcu-as-acnf_ns
+    name: vvcu-as-acnf_ns
+    version: 1.0
+    virtual-link-desc:
+    - id: mgmtnet
+      mgmt-network: true
+    vnfd-id:
+    - vvcu-as-acnf-knf

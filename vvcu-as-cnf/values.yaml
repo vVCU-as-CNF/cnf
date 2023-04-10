@@ -1,0 +1,7 @@
+appName: vvcu-as-cnf
+namespace: pi-vvcu
+image:
+  name: atnog-harbor.av.it.pt/pi-vvcu/dt
+  tag: latest
+
+insecureRegistries: atnog-harbor.av.it.pt

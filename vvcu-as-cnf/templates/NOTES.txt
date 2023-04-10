@@ -1,0 +1,3 @@
+helm upgrade release vVCU-as-CNF/ --values vVCU-as-CNF/values.yaml
+
+
