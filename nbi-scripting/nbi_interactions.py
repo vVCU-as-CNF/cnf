@@ -10,7 +10,8 @@ BASE_URL = "https://10.255.28.79:9999/osm/"
 # creating a new NS instance
 NAME = "nbi-test"
 NSD_ID = "8ead4781-8830-4be6-a5e1-68ade6c21edb" # vvcu-as-cnf
-VIM_ACCOUNT_ID = "83216c56-70be-4955-9120-386aad3862b6" # 5gasp-k8s-1
+VIM_ACCOUNT_ID = "a5571fea-254f-402a-8eec-ed4dc3424911" # 5gasp-k8s-1
+#VIM_ACCOUNT_ID = "83216c56-70be-4955-9120-386aad3862b6" # 5gasp-k8s-2
 
 session = requests.Session()
 session.verify = False
@@ -201,6 +202,26 @@ def createNSInstance():
 
     return instance_id
 
+def instantiateNSInstance(id):
+    """Instantiates a given NS instance on OSM"""
+    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/instantiate"
+    payload = {
+        "vimAccountId": VIM_ACCOUNT_ID,
+        "nsName": NAME,
+        "nsdId": id,
+    }
+
+    r = session.post(url, data=payload)
+
+    instance = yaml.safe_load(r.text)
+    instance_id = instance["id"]
+
+    print("--------------------")
+    print("Instantiated NS instance: ")
+    print("  name - " + NAME)
+    print("  id - " + instance_id)
+    print("--------------------")
+
 def buildNSInstance():
     """Creates and instantiates NS instance on OSM"""
     url = BASE_URL + "nslcm/v1/ns_instances_content"
@@ -223,6 +244,17 @@ def buildNSInstance():
 
     return instance_id    
 
+def terminateNSInstance(id):
+    """Terminates a given NS instance on OSM"""
+    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/terminate"
+
+    r = session.post(url)
+
+    print("--------------------")
+    print("Terminated NS instance: ")
+    print("  name - " + NAME)
+    print("  id - " + id)
+    print("--------------------")
 
 def deleteNSInstance(id):
     """Deletes a given NS instance on OSM"""
@@ -233,38 +265,6 @@ def deleteNSInstance(id):
 
     print("--------------------")
     print("Deleted NS instance: ")
-    print("  id - " + id)
-    print("--------------------")
-
-def instantiateNSInstance(id):
-    """Instantiates a given NS instance on OSM"""
-    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/instantiate"
-    payload = {
-        "vimAccountId": VIM_ACCOUNT_ID,
-        "nsName": NAME,
-        "nsdId": id,
-    }
-
-    r = session.post(url, data=payload)
-
-    instance = yaml.safe_load(r.text)
-    instance_id = instance["id"]
-
-    print("--------------------")
-    print("Instantiated NS instance: ")
-    print("  name - " + NAME)
-    print("  id - " + instance_id)
-    print("--------------------")
-
-def terminateNSInstance(id):
-    """Terminates a given NS instance on OSM"""
-    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/terminate"
-
-    r = session.post(url)
-
-    print("--------------------")
-    print("Terminated NS instance: ")
-    print("  name - " + NAME)
     print("  id - " + id)
     print("--------------------")
 

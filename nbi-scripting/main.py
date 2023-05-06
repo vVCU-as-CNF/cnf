@@ -30,9 +30,9 @@ def main():
 
     ns_instances = listNSInstances()
     # getNSInstanceInfo(ns_instances[NS_INSTANCE]["id"])
-    # instance_id = createNSInstance()
-    instance_id = buildNSInstance()
-    # instantiateNSInstance(instance_id)
+    instance_id = createNSInstance()
+    # instance_id = buildNSInstance()
+    instantiateNSInstance(instance_id)
     # terminateNSInstance(instance_id)
     # deleteNSInstance(instance_id)
 
