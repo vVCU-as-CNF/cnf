@@ -5,11 +5,18 @@ from time import sleep
 # STATIC VARIABLES
 #
 
-# testing getters
-VIM_ACCOUNT_NAME = "5gasp-k8s-1"
-VNF_NAME = "vvcu-as-cnf"
-NS_NAME = "vvcu-as-cnf_ns"
-NS_INSTANCE = "vvcu-as-acnf"
+VIM_ACCOUNT_NAME_1 = "5gasp-k8s-1"
+VIM_ACCOUNT_NAME_2 = "5gasp-k8s-2"
+
+VNF_PACKAGE_NAME = "vvcu-as-cnf"
+NS_PACKAGE_NAME = "vvcu-as-cnf_ns"
+
+# creating a new NS instance
+INSTANCE_NAME = "nbi-test"
+NSD_NAME = "vvcu-as-cnf_ns" # TODO CHANGE THIS WHEN WIFI AND REMOVE LINE BELOW
+NSD_ID = "8ead4781-8830-4be6-a5e1-68ade6c21edb" # vvcu-as-cnf
+#VIM_ACCOUNT_ID_1 = "a5571fea-254f-402a-8eec-ed4dc3424911" # 5gasp-k8s-1
+#VIM_ACCOUNT_ID_2 = "83216c56-70be-4955-9120-386aad3862b6" # 5gasp-k8s-2
 
 #
 # MAIN
@@ -17,26 +24,17 @@ NS_INSTANCE = "vvcu-as-acnf"
 def main():
     getToken()
     
-    # allTokens()
-
     vim_accounts = listVIMAccounts()
-    # getVIMAccountInfo(vim_accounts[VIM_ACCOUNT_NAME])
+    ns_packages = listNSPackages()
+    instance_id = createNSInstance(vim_accounts[VIM_ACCOUNT_NAME_1], ns_packages[NSD_NAME], INSTANCE_NAME)
+    instantiateNSInstance(instance_id, vim_accounts[VIM_ACCOUNT_NAME_1], INSTANCE_NAME)
+    listNSInstances()
 
-    # vnf_packages = listVNFPackages()
-    # getVNFPackageInfo(vnf_packages[VNF_NAME])
-
-    # ns_packages = listNSPackages()
-    # getNSPackageInfo(ns_packages[NS_NAME])
-
-    ns_instances = listNSInstances()
-    # getNSInstanceInfo(ns_instances[NS_INSTANCE]["id"])
-    instance_id = createNSInstance()
-    # instance_id = buildNSInstance()
-    instantiateNSInstance(instance_id)
     # terminateNSInstance(instance_id)
     # deleteNSInstance(instance_id)
 
     deleteToken()
+    
 
 if __name__ == "__main__":
     main()

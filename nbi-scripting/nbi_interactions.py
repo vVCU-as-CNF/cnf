@@ -7,12 +7,6 @@ import requests
 
 BASE_URL = "https://10.255.28.79:9999/osm/"
 
-# creating a new NS instance
-NAME = "nbi-test"
-NSD_ID = "8ead4781-8830-4be6-a5e1-68ade6c21edb" # vvcu-as-cnf
-VIM_ACCOUNT_ID = "a5571fea-254f-402a-8eec-ed4dc3424911" # 5gasp-k8s-1
-#VIM_ACCOUNT_ID = "83216c56-70be-4955-9120-386aad3862b6" # 5gasp-k8s-2
-
 session = requests.Session()
 session.verify = False
 
@@ -38,14 +32,14 @@ def getToken():
     return token
 
 def deleteToken():
-    """Deletes token from OSM"""
+    """Deletes current token from OSM"""
     url = BASE_URL + "admin/v1/tokens"
     r = session.delete(url)
 
     token = r.text.split(" ")[2].replace("\'", "")
 
     print("--------------------")
-    print("Deleted token: " + token)
+    print("Deleted current token: " + token)
     print("--------------------")
 
 def allTokens():
@@ -59,7 +53,7 @@ def allTokens():
     print("--------------------")
     print("All active tokens: ")
     for t in tokens:
-        print("- " + t)
+        print(" - " + t)
     print("--------------------")
 
     return tokens
@@ -101,23 +95,26 @@ def listVNFPackages():
     url = BASE_URL + "vnfpkgm/v1/vnf_packages"
     r = session.get(url)
 
-    lines = r.text.split("\n")
+    # lines = r.text.split("\n")
 
-    vnf_packages = [l.replace("        name: ", "") for l in lines if l.startswith("        name: ")]
-    vnf_packages_ids = [l.replace("    _id: ", "") for l in lines if l.startswith("    _id: ")]
+    # vnf_packages = [l.replace("        name: ", "") for l in lines if l.startswith("        name: ")]
+    # vnf_packages_ids = [l.replace("    _id: ", "") for l in lines if l.startswith("    _id: ")]
+
+    vnf_packages = yaml.safe_load(r.text)
+    vnf_packages = {a["name"]: a["_id"] for a in vnf_packages}
 
     print("--------------------")   
     print("All VNF packages: ")
-    for i in range(len(vnf_packages)):
-        print("  " + vnf_packages[i])
-        print("  id - " + vnf_packages_ids[i])
+    for k in vnf_packages:
+        print("  " + k)
+        print("  id - " + vnf_packages[k])
     print("--------------------")
 
-    return {k: v for k, v in zip(vnf_packages, vnf_packages_ids)}
+    return vnf_packages
 
-def getVNFPackageInfo(id):
+def getVNFPackageInfo(package_id):
     """Gets VNF package info from OSM"""
-    url = BASE_URL + "vnfpkgm/v1/vnf_packages/" + id
+    url = BASE_URL + "vnfpkgm/v1/vnf_packages/" + package_id
     r = session.get(url)
 
     print(r.text)
@@ -143,9 +140,9 @@ def listNSPackages():
 
     return ns_packages
 
-def getNSPackageInfo(id):
+def getNSPackageInfo(package_id):
     """Gets NS package info from OSM"""
-    url = BASE_URL + "nsd/v1/ns_descriptors/" + id
+    url = BASE_URL + "nsd/v1/ns_descriptors/" + package_id
     r = session.get(url)
 
     print(r.text)
@@ -180,13 +177,13 @@ def getNSInstanceInfo(id):
 
     print(r.text)
 
-def createNSInstance():
+def createNSInstance(vim_acc_id, nsd_id, instance_name):
     """Creates NS instance on OSM (does not instantiate it)"""
     url = BASE_URL + "nslcm/v1/ns_instances"
     payload = {
-        "vimAccountId": VIM_ACCOUNT_ID,
-        "nsdId": NSD_ID, 
-        "nsName": NAME,
+        "vimAccountId": vim_acc_id,
+        "nsdId": nsd_id, 
+        "nsName": instance_name,
     }
 
     r = session.post(url, data=payload)
@@ -196,39 +193,40 @@ def createNSInstance():
 
     print("--------------------")
     print("Created NS instance: ")
-    print("  name - " + NAME)
-    print("  id - " + instance_id)
+    print("  name - " + instance_name)
+    print("  id   - " + instance_id)
     print("--------------------")
 
     return instance_id
 
-def instantiateNSInstance(id):
+def instantiateNSInstance(instance_id, vim_acc_id, instance_name):
     """Instantiates a given NS instance on OSM"""
-    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/instantiate"
+    url = BASE_URL + "nslcm/v1/ns_instances/" + instance_id + "/instantiate"
     payload = {
-        "vimAccountId": VIM_ACCOUNT_ID,
-        "nsName": NAME,
-        "nsdId": id,
+        "nsdId": instance_id,
+        "vimAccountId": vim_acc_id,
+        "nsName": instance_name,
     }
 
     r = session.post(url, data=payload)
 
     instance = yaml.safe_load(r.text)
+    print(instance)
     instance_id = instance["id"]
 
     print("--------------------")
     print("Instantiated NS instance: ")
-    print("  name - " + NAME)
-    print("  id - " + instance_id)
+    print("  name - " + instance_name)
+    print("  id   - " + instance_id)
     print("--------------------")
 
-def buildNSInstance():
+def buildNSInstance(vim_acc_id, nsd_id, instance_name):
     """Creates and instantiates NS instance on OSM"""
     url = BASE_URL + "nslcm/v1/ns_instances_content"
     payload = {
-        "nsName": NAME,
-        "nsdId": NSD_ID, 
-        "vimAccountId": VIM_ACCOUNT_ID,
+        "nsName": instance_name,
+        "nsdId": nsd_id, 
+        "vimAccountId": vim_acc_id,
     }
 
     r = session.post(url, data=payload)
@@ -238,33 +236,33 @@ def buildNSInstance():
 
     print("--------------------")
     print("Created and instantiated NS instance: ")
-    print("  name - " + NAME)
-    print("  id - " + instance_id)
+    print("  name - " + instance_name)
+    print("  id   - " + instance_id)
     print("--------------------")
 
     return instance_id    
 
-def terminateNSInstance(id):
+def terminateNSInstance(instance_id):
     """Terminates a given NS instance on OSM"""
-    url = BASE_URL + "nslcm/v1/ns_instances/" + id + "/terminate"
+    url = BASE_URL + "nslcm/v1/ns_instances/" + instance_id + "/terminate"
 
     r = session.post(url)
 
     print("--------------------")
     print("Terminated NS instance: ")
-    print("  name - " + NAME)
-    print("  id - " + id)
+    # print("  name - " + NAME)
+    print("  id - " + instance_id)
     print("--------------------")
 
-def deleteNSInstance(id):
+def deleteNSInstance(instance_id):
     """Deletes a given NS instance on OSM"""
-    url = BASE_URL + "nslcm/v1/ns_instances/" + id
+    url = BASE_URL + "nslcm/v1/ns_instances/" + instance_id
     r = session.delete(url)
 
     print(r.text)
 
     print("--------------------")
     print("Deleted NS instance: ")
-    print("  id - " + id)
+    print("  id - " + instance_id)
     print("--------------------")
 
