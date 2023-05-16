@@ -1,10 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}
-  namespace: {{ .Values.namespace }}
+  name: {{ include "eechart.fullname" . }}
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: {{ .Values.appName }}
@@ -23,3 +22,16 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 3306
+        env:
+        - name: IN_BROKER_HOST
+          value: {{ .Values.broker }}
+        readinessProbe:
+          exec:
+            command:
+            - netstat
+            - -na
+            - |
+            - grep
+            - "3306"
+          initialDelaySeconds: 1
+          periodSeconds: 1

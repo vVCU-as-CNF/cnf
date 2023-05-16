@@ -1,0 +1,19 @@
+vnfd:
+  id: vvcu-as-acnf
+  description: K8s container deployment of OSM
+  product-name: vvcu-as-cnf
+  provider: ATNOG
+  version: '1.0'
+  mgmt-cp: mgmt-ext
+  df:
+  - id: default-df
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  kdu:
+  - name: vvcu-as-cnf
+    helm-chart: vvcu-as-cnf.tar.gz
+    helm-version: v3

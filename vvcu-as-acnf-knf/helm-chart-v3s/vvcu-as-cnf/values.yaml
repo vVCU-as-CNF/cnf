@@ -1,0 +1,8 @@
+appName: vvcu-as-cnf
+namespace: 99df5250-1cec-49f5-aba8-25017a9aadb7
+image:
+  name: atnog-harbor.av.it.pt/pi-vvcu/dt
+  tag: latest
+
+insecureRegistries: atnog-harbor.av.it.pt
+broker: localhost
