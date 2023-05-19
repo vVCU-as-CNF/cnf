@@ -1,6 +1,6 @@
 nsd:
   nsd:
-  - description: NS consisting of a single KNF openldap_knf connected to mgmt network
+  - description: NS consisting of a single KNF connected to mgmt network
     designer: OSM
     df:
     - id: default-df
