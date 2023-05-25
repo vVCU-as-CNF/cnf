@@ -5,13 +5,13 @@ nsd:
     df:
     - id: default-df
       vnf-profile:
-      - id: vvcu-as-acnf-knf
+      - id: vvcu-as-acnf
         virtual-link-connectivity:
         - constituent-cpd-id:
           - constituent-base-element-id: vvcu-as-acnf
             constituent-cpd-id: mgmt-ext
           virtual-link-profile-id: mgmtnet
-        vnfd-id: vvcu-as-acnf-knf
+        vnfd-id: vvcu-as-acnf
     id: vvcu-as-acnf_ns
     name: vvcu-as-acnf_ns
     version: 1.0
@@ -19,4 +19,4 @@ nsd:
     - id: mgmtnet
       mgmt-network: true
     vnfd-id:
-    - vvcu-as-acnf-knf
+    - vvcu-as-acnf

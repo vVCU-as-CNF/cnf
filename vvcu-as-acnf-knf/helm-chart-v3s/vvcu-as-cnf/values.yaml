@@ -1,5 +1,5 @@
 appName: vvcu-as-cnf
-namespace: 99df5250-1cec-49f5-aba8-25017a9aadb7
+namespace: 2a6f15e7-cef8-4037-9423-74516a7ccfa8
 image:
   name: atnog-harbor.av.it.pt/pi-vvcu/dt
   tag: latest
