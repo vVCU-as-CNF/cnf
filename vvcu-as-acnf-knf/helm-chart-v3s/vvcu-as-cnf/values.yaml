@@ -5,4 +5,4 @@ image:
   tag: latest
 
 insecureRegistries: atnog-harbor.av.it.pt
-broker: localhost
+broker: es-broker.av.it.pt

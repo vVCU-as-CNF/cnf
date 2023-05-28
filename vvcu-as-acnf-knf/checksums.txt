@@ -1,6 +1,6 @@
 9ae8052938eb26a1c169a60be3201592	vvcu-as-acnf-knf/vnfd.yaml
-946d7a261f9d76acbe30764dc77d28a1	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf.tar.gz
-f0e10912b785b225fc3f7e782cddcfb2	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf/values.yaml
+fa1eadf06dc0d5ac538167b43514232e	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf.tar.gz
+6e259b7c902fd13a0d1e91890ffd384a	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf/values.yaml
 8015f88e7d04b17b2b47156334144763	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf/Chart.yaml
 3b67f20e64d73db6b642e299b5b6a453	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf/templates/_helpers.tpl
 289ed66467fa11139637ac7ab245d920	vvcu-as-acnf-knf/helm-chart-v3s/vvcu-as-cnf/templates/NOTES.txt
